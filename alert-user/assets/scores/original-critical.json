@@ -1,0 +1,12 @@
+{
+  "name": "Original Critical Beacon",
+  "license": "CC0-1.0",
+  "notes": [
+    {"frequency": 880.00, "duration": 0.12, "gap": 0.04, "gain": 0.78},
+    {"frequency": 1174.66, "duration": 0.12, "gap": 0.04, "gain": 0.82},
+    {"frequency": 880.00, "duration": 0.12, "gap": 0.04, "gain": 0.78},
+    {"frequency": 1318.51, "duration": 0.22, "gap": 0.08, "gain": 0.86},
+    {"frequency": 1046.50, "duration": 0.12, "gap": 0.04, "gain": 0.80},
+    {"frequency": 1567.98, "duration": 0.32, "gap": 0.14, "gain": 0.88}
+  ]
+}

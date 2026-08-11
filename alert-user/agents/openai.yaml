@@ -1,0 +1,4 @@
+interface:
+  display_name: "Alert User"
+  short_description: "Escalate reminders when Codex needs user action"
+  default_prompt: "Use $alert-user to get my attention when you are blocked on a manual action."

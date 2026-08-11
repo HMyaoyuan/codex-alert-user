@@ -1,0 +1,9 @@
+{
+  "name": "Original Gentle Knock",
+  "license": "CC0-1.0",
+  "notes": [
+    {"frequency": 659.25, "duration": 0.16, "gap": 0.09, "gain": 0.58},
+    {"frequency": 783.99, "duration": 0.24, "gap": 0.14, "gain": 0.62},
+    {"frequency": 659.25, "duration": 0.20, "gap": 0.10, "gain": 0.55}
+  ]
+}
