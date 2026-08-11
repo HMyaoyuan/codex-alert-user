@@ -1,0 +1,12 @@
+{
+  "name": "Fire Truck Hi-Lo",
+  "license": "CC0-1.0",
+  "siren": {
+    "type": "hilo",
+    "low_hz": 660,
+    "high_hz": 990,
+    "cycle_seconds": 0.7,
+    "cycles": 12,
+    "gain": 0.95
+  }
+}

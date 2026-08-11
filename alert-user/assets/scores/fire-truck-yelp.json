@@ -1,0 +1,12 @@
+{
+  "name": "Fire Truck Yelp",
+  "license": "CC0-1.0",
+  "siren": {
+    "type": "yelp",
+    "low_hz": 600,
+    "high_hz": 1600,
+    "cycle_seconds": 0.5,
+    "cycles": 10,
+    "gain": 0.95
+  }
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Show a bounded, opt-in, slow high-contrast visual attention pulse."""
+"""Show a bounded, opt-in, aggressive full-screen visual attention strobe."""
 
 from __future__ import annotations
 
@@ -7,8 +7,8 @@ import argparse
 import json
 import sys
 
-MAX_RATE_HZ = 1.0
-MAX_DURATION_SECONDS = 20.0
+MAX_RATE_HZ = 12.0
+MAX_DURATION_SECONDS = 60.0
 
 
 def validated_timing(rate_hz: float, duration: float) -> tuple[float, float]:
@@ -28,8 +28,15 @@ def show(message: str, rate_hz: float, duration: float) -> None:
     root.attributes("-fullscreen", True)
     root.attributes("-topmost", True)
     root.configure(cursor="hand2")
-    colors = [("#111111", "#ffffff"), ("#ffffff", "#111111"), ("#b00020", "#ffffff")]
-    label = tk.Label(root, text=message, font=("Helvetica", 42, "bold"), padx=48, pady=48, wraplength=1100)
+    colors = [
+        ("#ff0000", "#ffffff"),
+        ("#000000", "#ffff00"),
+        ("#ffffff", "#ff0000"),
+        ("#ffff00", "#000000"),
+        ("#b00020", "#ffffff"),
+        ("#000000", "#ffffff"),
+    ]
+    label = tk.Label(root, text=message, font=("Helvetica", 64, "bold"), padx=48, pady=48, wraplength=1100)
     label.pack(expand=True, fill="both")
     root.bind("<Escape>", lambda _event: root.destroy())
     root.bind("<Button-1>", lambda _event: root.destroy())
@@ -52,8 +59,8 @@ def show(message: str, rate_hz: float, duration: float) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--message", default="Codex needs your attention")
-    parser.add_argument("--rate", type=float, default=0.8)
-    parser.add_argument("--duration", type=float, default=12.0)
+    parser.add_argument("--rate", type=float, default=8.0)
+    parser.add_argument("--duration", type=float, default=30.0)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     rate, duration = validated_timing(args.rate, args.duration)

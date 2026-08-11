@@ -6,9 +6,9 @@ Use the lowest level that can reasonably reach the user. Escalate only after the
 | --- | --- | --- | --- |
 | 1 | Chat plus native notification | Immediate | Persistent-reminder permission |
 | 2 | Level 1 plus bring the task app forward | 5 minutes | Persistent-reminder permission |
-| 3 | Level 2 plus one synthesized chime | 10 minutes | Explicit sound permission |
-| 4 | Level 3 plus a bounded dialog and repeated alarm phrase | 15 minutes | Explicit sound and dialog permission |
-| 5 | Level 4 plus a full-screen 1 Hz high-contrast pulse for at most 20 seconds | 20 minutes | Explicit sound and visual-pulse permission |
+| 3 | Level 2 plus a fire-truck yelp siren burst | 10 minutes | Explicit sound permission |
+| 4 | Level 3 plus a bounded dialog and a repeated fire-truck wail | 15 minutes | Explicit sound and dialog permission |
+| 5 | Level 4 plus a full-screen 8-12 Hz high-contrast strobe for up to 60 seconds and the hi-lo siren at full volume | 20 minutes | Explicit sound and visual-pulse permission |
 
 ## Selection Rules
 

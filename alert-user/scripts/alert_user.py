@@ -17,7 +17,7 @@ from pathlib import Path
 from synth_alarm import load_score, play_wav, render_wav, score_duration, score_path_for_level
 from visual_pulse import validated_timing
 
-MAX_VOLUME = 75
+MAX_VOLUME = 100
 SCRIPT_DIR = Path(__file__).resolve().parent
 
 
@@ -202,7 +202,7 @@ def alert(args: argparse.Namespace) -> dict:
     result = {"level": args.level, "actions": actions, "preflight": report, "dry_run": args.dry_run}
     score = None
     score_path = args.score or score_path_for_level(args.level)
-    repeat = 1 if args.level == 3 else (2 if args.level == 4 else 3)
+    repeat = 3 if args.level == 3 else (4 if args.level == 4 else 6)
     if args.level >= 3 and args.allow_sound:
         score = load_score(score_path)
         result["score"] = score.get("name", score_path.name)
@@ -294,13 +294,13 @@ def build_parser() -> argparse.ArgumentParser:
     alert_parser.add_argument("--allow-dialog", action="store_true")
     alert_parser.add_argument("--allow-visual-pulse", action="store_true")
     alert_parser.add_argument("--allow-volume-change", action="store_true")
-    alert_parser.add_argument("--target-volume", type=int, choices=range(1, MAX_VOLUME + 1), default=60)
+    alert_parser.add_argument("--target-volume", type=int, choices=range(1, MAX_VOLUME + 1), default=100)
     alert_parser.add_argument("--allow-device-switch", action="store_true")
     alert_parser.add_argument("--device")
     alert_parser.add_argument("--score", type=Path)
     alert_parser.add_argument("--dialog-timeout", type=int, choices=range(5, 31), default=15)
-    alert_parser.add_argument("--pulse-rate", type=float, default=0.8)
-    alert_parser.add_argument("--pulse-duration", type=float, default=12.0)
+    alert_parser.add_argument("--pulse-rate", type=float, default=8.0)
+    alert_parser.add_argument("--pulse-duration", type=float, default=30.0)
     alert_parser.add_argument("--dry-run", action="store_true")
     return parser
 

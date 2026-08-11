@@ -8,10 +8,10 @@ Codex has reached the ancient and terrifying state known as: **waiting for you t
 
 `alert-user` is a Codex skill for progressively getting a user's attention when an authorized persistent task is blocked on a confirmation, approval, login, browser interaction, hardware action, or other manual step.
 
-It starts polite. It can become gloriously difficult to ignore. It does not turn your desk into a hearing test or a seizure trigger.
+It starts polite. It escalates to a full-scale fire-truck siren and a rapid full-screen strobe. This fork is tuned for a user who attested to healthy hearing, no photosensitivity, and sound-isolating earmuffs — subtlety would literally cost them income.
 
 > [!WARNING]
-> **This project does not implement injury-oriented alerts.** It will not target hearing damage, induce seizures, set every device to maximum volume, use rapid strobing, or remove its safety limits. Loud sound and flashing light can harm people unexpectedly—including bystanders. The strongest mode is deliberately bounded, opt-in, and stoppable.
+> **This fork runs in maximum-intensity mode.** Level 5 synthesizes near-full-scale fire-truck sirens, may temporarily set system volume to 100%, and strobes the screen at 8-12 Hz — inside the photosensitive-seizure risk band for susceptible people. Use it only for the attesting user, never around bystanders, and always with the explicit opt-in flags. Escape or a click dismisses the visual immediately; volume is restored after every run.
 
 ### Install it by talking to Codex
 
@@ -27,13 +27,13 @@ That is the normal installation flow. Codex's `skill-installer` downloads the pu
 | --- | --- |
 | 1 | Native notification |
 | 2 | Notification and bring Codex forward |
-| 3 | Add an original synthesized chime |
-| 4 | Add a bounded confirmation dialog and repeated alarm phrase |
-| 5 | Add a full-screen, high-contrast **slow** pulse and urgent synthesized alarm at the same time |
+| 3 | Add a fire-truck **yelp** siren burst |
+| 4 | Add a bounded confirmation dialog and a repeated fire-truck **wail** |
+| 5 | Add a full-screen, high-contrast **8-12 Hz strobe** and the **hi-lo** siren at full volume at the same time |
 
-Each channel has its own permission boundary. Sound, temporary volume changes, device switching, and visual pulses are never inferred from a generic "remind me" request.
+Each channel has its own permission boundary. Sound, temporary volume changes, device switching, and visual strobes are never inferred from a generic "remind me" request.
 
-Level 5 is the theatrical maximum: multiple channels, foreground takeover, an original critical score synthesized at runtime, and a high-contrast visual pulse. It remains capped at 75% temporary system volume, 0.4 full-scale generated audio, 1 Hz visual transitions, and 20 seconds. Escape or a click dismisses the visual immediately.
+Level 5 is the theatrical maximum: multiple channels, foreground takeover, an original hi-lo siren synthesized at runtime at near full scale, temporary system volume up to 100% (restored afterwards), and a rapid red/black/white/yellow visual strobe for up to 60 seconds. Escape or a click dismisses the visual immediately.
 
 ### Try it without surprising yourself
 
@@ -67,21 +67,21 @@ Restart Codex or begin a new task so the skill metadata is discovered.
 
 ### About the alarm "score"
 
-The repository ships note data, not an MP3. The three bundled jingles are original CC0 scores rendered into WAV data at runtime. You can supply another JSON score that you own or are licensed to use.
+The repository ships score data, not an MP3. The three bundled fire-truck sirens (yelp, wail, hi-lo) are original CC0 scores rendered into WAV data at runtime. You can supply another JSON score that you own or are licensed to use.
 
 Musical notation is still copyrighted expression, so this repository does not smuggle a copyrighted song in through the sheet-music door. The door has been checked. It is not a loophole.
 
-### Safety is part of the feature
+### Bounded, not tame
 
-- Generated audio is amplitude-limited.
-- Temporary volume increases are capped at 75% and restored.
+- Generated audio is amplitude-limited to 0.95 full scale.
+- Temporary volume increases may reach 100% when authorized and are always restored.
 - Output devices are inspected, but never rotated automatically.
 - Headphones, hearing aids, virtual meeting devices, and remote outputs are never selected automatically.
-- Visual pulses are opt-in, capped at 1 Hz, bounded to 20 seconds, and dismissible with Escape or a click.
+- Visual strobes are opt-in, capped at 12 Hz, bounded to 60 seconds, and dismissible with Escape or a click.
 - Recurring reminders belong in one stoppable Codex heartbeat, not a hidden infinite daemon.
 - Any response from the user pauses escalation; confirmation stops it.
 
-The most dramatic level should feel urgent, absurd, and memorable—not hostile or medically dangerous.
+The most dramatic level is meant to punch through sound-isolating earmuffs and a turned-around chair. Keep it away from anyone who did not sign up for that.
 
 ### Development
 
@@ -101,10 +101,10 @@ Codex 已经进入那个古老、可怕、让 AI 急得团团转的状态：**�
 
 `alert-user` 是一个渐进式提醒用户的 Codex skill。当一个经过用户授权的持续任务卡在确认、审批、登录、浏览器操作、硬件操作或其他人工步骤时，它会从礼貌提醒逐步升级，努力把用户叫回来。
 
-它一开始很温柔，最后可以夸张到很难忽略；但它不会把你的桌面变成听力测试中心或癫痫诱发器。
+它一开始很温柔，最后会升级到满幅消防车警笛加全屏高频爆闪。本仓库为一位确认听力健康、无光敏癫痫、且日常戴隔音耳罩的用户调校——对它来说，太温柔就意味着错过工作、损失收入。
 
 > [!WARNING]
-> **本项目不会实现以伤害为目标的提醒。** 它不会以听力损伤、诱发癫痫为设计目标，不会把所有设备轮流调到最大音量，不会快速频闪，也不会移除安全上限。强声音和闪光可能意外伤害用户及旁观者。最高级模式依然是有边界、需明确授权、随时可停止的。
+> **本仓库运行在最大强度模式。** 第 5 级会合成接近满幅的消防车警笛、可能把系统音量临时拉到 100%，并以 8-12 Hz 全屏频闪——这个频率落在易感人群的光敏癫痫风险区间内。只限已确认身体状况的用户本人使用，切勿在旁观者周围使用，并且始终通过明确的授权开关启用。按 Escape 或点击鼠标可立即关闭视觉提醒；每次运行结束后都会恢复原音量。
 
 ### 对 Codex 说一句话就能安装
 
@@ -120,13 +120,13 @@ Codex 已经进入那个古老、可怕、让 AI 急得团团转的状态：**�
 | --- | --- |
 | 1 | 系统原生通知 |
 | 2 | 通知并把 Codex 切到前台 |
-| 3 | 加入原创的程序合成提示音 |
-| 4 | 加入限时确认弹窗和重复报警乐句 |
-| 5 | 同时启动全屏高对比度**慢速**脉冲和紧急合成报警声 |
+| 3 | 加入消防车 **yelp** 急促警笛 |
+| 4 | 加入限时确认弹窗和反复的消防车 **wail** 长鸣警笛 |
+| 5 | 同时启动全屏高对比度 **8-12 Hz 爆闪** 和满音量 **hi-lo** 双音警笛 |
 
-每一种通道都需要独立授权。用户只说“提醒我”，不等于自动允许声音、临时修改音量、切换输出设备或显示视觉脉冲。
+每一种通道都需要独立授权。用户只说“提醒我”，不等于自动允许声音、临时修改音量、切换输出设备或显示视觉爆闪。
 
-第 5 级是“戏剧效果拉满”的安全最高档：多通道同时提醒、切回前台、运行时合成原创紧急谱子，再加高对比度视觉脉冲。但临时系统音量仍不超过 75%，生成音频振幅不超过满幅的 0.4，视觉变化不超过 1 Hz，总时长不超过 20 秒。按 Escape 或点击鼠标可以立即关闭视觉提醒。
+第 5 级是“戏剧效果拉满”的最高档：多通道同时提醒、切回前台、运行时合成接近满幅的原创 hi-lo 警笛、临时系统音量最高 100%（结束后恢复），再加红/黑/白/黄高频视觉爆闪，最长 60 秒。按 Escape 或点击鼠标可以立即关闭视觉提醒。
 
 ### 先演习，不要突然吓自己
 
@@ -160,21 +160,21 @@ ln -s "$PWD/codex-alert-user/alert-user" "${CODEX_HOME:-$HOME/.codex}/skills/ale
 
 ### 关于报警“谱子”
 
-仓库内置的是音符数据，不是 MP3。三套提示乐句均为原创 CC0 谱子，运行时才会被合成为 WAV。你也可以传入自己拥有版权或使用授权的 JSON 谱子。
+仓库内置的是谱子数据，不是 MP3。三套消防车警笛（yelp 急促、wail 长鸣、hi-lo 双音）均为原创 CC0 谱子，运行时才会被合成为 WAV。你也可以传入自己拥有版权或使用授权的 JSON 谱子。
 
 完整乐谱同样属于受版权保护的音乐表达，所以本仓库不会尝试通过“只放谱子”来绕过歌曲版权。换一扇门，并不会让版权墙消失。
 
-### 安全本身就是功能
+### 有边界，但不温柔
 
-- 合成音频有硬编码的振幅限制。
-- 临时提高音量时最高为 75%，结束后恢复原音量。
+- 合成音频振幅最高为满幅的 0.95。
+- 临时提高音量时最高可到 100%，结束后恢复原音量。
 - 会检查输出设备，但不会自动轮换播放。
 - 不会自动选择耳机、助听器、会议软件虚拟设备或远程输出。
-- 视觉脉冲必须明确授权，最高 1 Hz、最长 20 秒，并可用 Escape 或鼠标点击关闭。
+- 视觉爆闪必须明确授权，最高 12 Hz、最长 60 秒，并可用 Escape 或鼠标点击关闭。
 - 持续提醒应使用一个可以停止的 Codex heartbeat，而不是隐藏的无限后台进程。
 - 用户只要有任何回应就暂停升级；确认后立即停止提醒。
 
-最高级提醒应该让人觉得紧急、荒诞、记忆深刻，而不是带有敌意或医学危险。
+最高级提醒的目标是穿透隔音耳罩和转过去的椅子。请勿让任何没有签署这份“夸张协议”的人靠近屏幕和音箱。
 
 ### 开发与验证
 

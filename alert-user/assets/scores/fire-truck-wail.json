@@ -1,0 +1,12 @@
+{
+  "name": "Fire Truck Wail",
+  "license": "CC0-1.0",
+  "siren": {
+    "type": "wail",
+    "low_hz": 500,
+    "high_hz": 1700,
+    "cycle_seconds": 3.0,
+    "cycles": 3,
+    "gain": 0.95
+  }
+}

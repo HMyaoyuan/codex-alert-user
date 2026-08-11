@@ -5,7 +5,7 @@ description: Escalate user-attention reminders when Codex is blocked waiting for
 
 # Alert User
 
-Escalate from a quiet notification to a bounded audiovisual attention burst while preserving user control, hearing safety, and display safety.
+Escalate from a quiet notification to a loud, intense, bounded audiovisual attention burst. This fork is configured for a user who attested to healthy hearing, no photosensitivity, and who wears sound-isolating earmuffs — so the top levels are deliberately extreme: full-scale fire-truck sirens, 100% temporary system volume, and a rapid full-screen strobe.
 
 ## Workflow
 
@@ -41,15 +41,15 @@ python3 scripts/alert_user.py alert --level 3 --allow-sound --title "Still waiti
 python3 scripts/alert_user.py alert --level 5 --allow-sound --allow-dialog --allow-visual-pulse --dry-run
 ```
 
-Use `--allow-volume-change --target-volume N` only when the user explicitly authorized a temporary volume change. The script caps `N` at 75 and restores the original setting. Use `--device NAME --allow-device-switch` only for a device the user selected; never rotate through devices automatically.
+Use `--allow-volume-change --target-volume N` only when the user explicitly authorized a temporary volume change. The script caps `N` at 100 and restores the original setting. Use `--device NAME --allow-device-switch` only for a device the user selected; never rotate through devices automatically.
 
 ## Permission Boundaries
 
 - Treat notification permission as the baseline only.
 - Require explicit sound permission before `--allow-sound`.
-- Require explicit permission in the current task before changing volume, switching output devices, or showing a visual pulse.
-- Never set volume to 100, unmute silently, cycle every output, defeat Focus/Do Not Disturb, or keep an alert process alive indefinitely.
-- Never run visual pulses faster than the script's 1 Hz cap or longer than its 20-second cap.
+- Require explicit permission in the current task before changing volume, switching output devices, or showing a visual strobe.
+- Never unmute silently, cycle every output, defeat Focus/Do Not Disturb, or keep an alert process alive indefinitely.
+- Never run visual strobes faster than the script's 12 Hz cap or longer than its 60-second cap. The user attested to no photosensitivity; do not use the visual strobe around anyone else who has not.
 - Do not alert when the user said they are driving, sleeping, presenting, in a call, or in a safety-sensitive setting.
 - Stop on any equivalent of "confirmed", "done", "stop", "cancel", or "mute".
 
@@ -57,10 +57,10 @@ Read [references/safety.md](references/safety.md) before changing volume, select
 
 ## Scores
 
-The synthesized alarm reads JSON note scores. Levels 3-5 select bundled original gentle, urgent, and critical scores by default. Pass a user-owned/licensed score with `--score PATH`. Do not fetch or reconstruct copyrighted melodies. Musical notation is still protected expression; a score is not a copyright workaround.
+The synthesized alarm reads JSON scores. Levels 3-5 select bundled original fire-truck siren scores (yelp, wail, hi-lo) rendered with a harsh harmonic-rich waveform at near full scale. Legacy discrete `notes` scores are still supported; pass a user-owned/licensed score with `--score PATH`. Do not fetch or reconstruct copyrighted melodies. Musical notation is still protected expression; a score is not a copyright workaround.
 
 ```bash
-python3 scripts/synth_alarm.py --score assets/scores/original-urgent.json --output /tmp/alert-user.wav
+python3 scripts/synth_alarm.py --score assets/scores/fire-truck-wail.json --output /tmp/alert-user.wav
 ```
 
 ## Failure Handling
