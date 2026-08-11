@@ -7,7 +7,7 @@ import argparse
 import json
 import sys
 
-MAX_RATE_HZ = 12.0
+MAX_RATE_HZ = 24.0
 MAX_DURATION_SECONDS = 60.0
 
 
@@ -59,7 +59,7 @@ def show(message: str, rate_hz: float, duration: float) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--message", default="Codex needs your attention")
-    parser.add_argument("--rate", type=float, default=8.0)
+    parser.add_argument("--rate", type=float, default=16.0)
     parser.add_argument("--duration", type=float, default=30.0)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()

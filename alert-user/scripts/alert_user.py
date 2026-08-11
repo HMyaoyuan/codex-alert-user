@@ -18,6 +18,13 @@ from synth_alarm import load_score, play_wav, render_wav, score_duration, score_
 from visual_pulse import validated_timing
 
 MAX_VOLUME = 100
+LEVEL_NAMES = {
+    1: "The Polite Cough",
+    2: "The Desk Slam",
+    3: "Fire Truck Incoming",
+    4: "Citywide Meltdown",
+    5: "TOTAL APOCALYPSE",
+}
 SCRIPT_DIR = Path(__file__).resolve().parent
 
 
@@ -199,7 +206,13 @@ def plan_for_level(level: int, allow_sound: bool, allow_dialog: bool, allow_visu
 def alert(args: argparse.Namespace) -> dict:
     report = preflight()
     actions = plan_for_level(args.level, args.allow_sound, args.allow_dialog, args.allow_visual_pulse)
-    result = {"level": args.level, "actions": actions, "preflight": report, "dry_run": args.dry_run}
+    result = {
+        "level": args.level,
+        "level_name": LEVEL_NAMES[args.level],
+        "actions": actions,
+        "preflight": report,
+        "dry_run": args.dry_run,
+    }
     score = None
     score_path = args.score or score_path_for_level(args.level)
     repeat = 3 if args.level == 3 else (4 if args.level == 4 else 6)
@@ -286,7 +299,14 @@ def build_parser() -> argparse.ArgumentParser:
     inspect_parser.add_argument("--json", action="store_true")
 
     alert_parser = subparsers.add_parser("alert")
-    alert_parser.add_argument("--level", type=int, choices=range(1, 6), default=1)
+    alert_parser.add_argument(
+        "--level",
+        type=int,
+        choices=range(1, 6),
+        default=1,
+        help="1=The Polite Cough, 2=The Desk Slam, 3=Fire Truck Incoming, "
+        "4=Citywide Meltdown, 5=TOTAL APOCALYPSE",
+    )
     alert_parser.add_argument("--title", default="Codex needs your attention")
     alert_parser.add_argument("--message", default="Please return and complete the requested action.")
     alert_parser.add_argument("--activate-app", default="Codex")
@@ -299,7 +319,7 @@ def build_parser() -> argparse.ArgumentParser:
     alert_parser.add_argument("--device")
     alert_parser.add_argument("--score", type=Path)
     alert_parser.add_argument("--dialog-timeout", type=int, choices=range(5, 31), default=15)
-    alert_parser.add_argument("--pulse-rate", type=float, default=8.0)
+    alert_parser.add_argument("--pulse-rate", type=float, default=16.0)
     alert_parser.add_argument("--pulse-duration", type=float, default=30.0)
     alert_parser.add_argument("--dry-run", action="store_true")
     return parser

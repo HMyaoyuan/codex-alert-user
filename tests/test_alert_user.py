@@ -85,8 +85,13 @@ class EscalationTests(unittest.TestCase):
         self.assertLessEqual(alert_user.MAX_VOLUME, 100)
         self.assertLessEqual(synth_alarm.MAX_MASTER_GAIN, 1.0)
         self.assertGreaterEqual(synth_alarm.MAX_MASTER_GAIN, 0.9)
-        self.assertLessEqual(visual_pulse.MAX_RATE_HZ, 12.0)
+        self.assertLessEqual(visual_pulse.MAX_RATE_HZ, 24.0)
         self.assertLessEqual(visual_pulse.MAX_DURATION_SECONDS, 60.0)
+
+    def test_levels_have_dramatic_names(self) -> None:
+        self.assertEqual(sorted(alert_user.LEVEL_NAMES), [1, 2, 3, 4, 5])
+        for name in alert_user.LEVEL_NAMES.values():
+            self.assertTrue(name.strip())
 
     def test_level_five_degrades_without_permissions(self) -> None:
         self.assertEqual(
@@ -108,13 +113,13 @@ class EscalationTests(unittest.TestCase):
 
     def test_visual_caps_are_enforced(self) -> None:
         with self.assertRaises(ValueError):
-            visual_pulse.validated_timing(15.0, 5)
+            visual_pulse.validated_timing(30.0, 5)
         with self.assertRaises(ValueError):
-            visual_pulse.validated_timing(8.0, 120)
+            visual_pulse.validated_timing(16.0, 120)
 
     def test_visual_defaults_are_aggressive(self) -> None:
-        rate, duration = visual_pulse.validated_timing(8.0, 30.0)
-        self.assertEqual((rate, duration), (8.0, 30.0))
+        rate, duration = visual_pulse.validated_timing(16.0, 30.0)
+        self.assertEqual((rate, duration), (16.0, 30.0))
 
     def test_volume_parser_is_bounded_by_cli(self) -> None:
         parser = alert_user.build_parser()

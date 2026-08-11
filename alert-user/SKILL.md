@@ -7,6 +7,18 @@ description: Escalate user-attention reminders when Codex is blocked waiting for
 
 Escalate from a quiet notification to a loud, intense, bounded audiovisual attention burst. This fork is configured for a user who attested to healthy hearing, no photosensitivity, and who wears sound-isolating earmuffs — so the top levels are deliberately extreme: full-scale fire-truck sirens, 100% temporary system volume, and a rapid full-screen strobe.
 
+## The Five Stages
+
+Levels have names, because numbers are not urgent enough:
+
+| Level | Name | Channels added |
+| --- | --- | --- |
+| 1 | The Polite Cough | Native notification |
+| 2 | The Desk Slam | Bring the task app forward |
+| 3 | Fire Truck Incoming | Synthesized fire-truck yelp siren |
+| 4 | Citywide Meltdown | Bounded dialog plus repeated fire-truck wail |
+| 5 | TOTAL APOCALYPSE | Hi-lo siren at up to 100% volume plus a full-screen 16-24 Hz strobe |
+
 ## Workflow
 
 1. State the exact action needed and the consequence of waiting.
@@ -49,7 +61,7 @@ Use `--allow-volume-change --target-volume N` only when the user explicitly auth
 - Require explicit sound permission before `--allow-sound`.
 - Require explicit permission in the current task before changing volume, switching output devices, or showing a visual strobe.
 - Never unmute silently, cycle every output, defeat Focus/Do Not Disturb, or keep an alert process alive indefinitely.
-- Never run visual strobes faster than the script's 12 Hz cap or longer than its 60-second cap. The user attested to no photosensitivity; do not use the visual strobe around anyone else who has not.
+- Never run visual strobes faster than the script's 24 Hz cap or longer than its 60-second cap. The user attested to no photosensitivity; do not use the visual strobe around anyone else who has not.
 - Do not alert when the user said they are driving, sleeping, presenting, in a call, or in a safety-sensitive setting.
 - Stop on any equivalent of "confirmed", "done", "stop", "cancel", or "mute".
 

@@ -1,14 +1,14 @@
 # Escalation Ladder
 
-Use the lowest level that can reasonably reach the user. Escalate only after the prior interval passes without a response.
+Use the lowest stage that can reasonably reach the user. Escalate only after the prior interval passes without a response. Numbers are not urgent enough, so every stage has a name.
 
-| Level | Channels | Earliest escalation | Permission |
-| --- | --- | --- | --- |
-| 1 | Chat plus native notification | Immediate | Persistent-reminder permission |
-| 2 | Level 1 plus bring the task app forward | 5 minutes | Persistent-reminder permission |
-| 3 | Level 2 plus a fire-truck yelp siren burst | 10 minutes | Explicit sound permission |
-| 4 | Level 3 plus a bounded dialog and a repeated fire-truck wail | 15 minutes | Explicit sound and dialog permission |
-| 5 | Level 4 plus a full-screen 8-12 Hz high-contrast strobe for up to 60 seconds and the hi-lo siren at full volume | 20 minutes | Explicit sound and visual-pulse permission |
+| Level | Name | Channels | Earliest escalation | Permission |
+| --- | --- | --- | --- | --- |
+| 1 | The Polite Cough | Chat plus native notification | Immediate | Persistent-reminder permission |
+| 2 | The Desk Slam | Level 1 plus bring the task app forward | 5 minutes | Persistent-reminder permission |
+| 3 | Fire Truck Incoming | Level 2 plus a fire-truck yelp siren burst | 10 minutes | Explicit sound permission |
+| 4 | Citywide Meltdown | Level 3 plus a bounded dialog and a repeated fire-truck wail | 15 minutes | Explicit sound and dialog permission |
+| 5 | TOTAL APOCALYPSE | Level 4 plus a full-screen 16-24 Hz high-contrast strobe for up to 60 seconds and the hi-lo siren at full volume | 20 minutes | Explicit sound and visual-pulse permission |
 
 ## Selection Rules
 

@@ -18,10 +18,10 @@ The caps below are still hard properties of the scripts. Do not remove or raise 
 ## Display
 
 - Visual strobes require explicit opt-in and an interactive desktop session.
-- Cap transitions at 12 Hz and total duration at 60 seconds.
+- Cap transitions at 24 Hz and total duration at 60 seconds.
 - Provide an immediate Escape/click exit and descriptive static text.
 - Do not use unbounded loops or patterns intended to bypass accessibility settings.
-- The 8-12 Hz range is inside the photosensitive-seizure risk band for susceptible people. Only the attesting user should ever see this mode; warn anyone else away from the screen first.
+- **Photosensitive epilepsy: forbidden, full stop.** The 8-24 Hz range sits squarely inside the photosensitive-seizure risk band. Only the attesting user should ever see this mode; warn anyone else away from the screen first, and never enable `--allow-visual-pulse` on a shared or public display.
 
 ## Automation
 
