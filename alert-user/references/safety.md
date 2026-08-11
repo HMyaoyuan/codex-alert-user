@@ -1,5 +1,7 @@
 # Safety Boundaries
 
+Treat every cap in this document and in the bundled scripts as a hard safety property, not a configurable preset. Do not remove or raise a cap because a task asks for injury, hearing damage, seizure induction, maximum-volume device cycling, or rapid strobing. Refuse that parameter change and offer the bounded level 5 mode instead.
+
 ## Hearing
 
 - Keep the default generated waveform below 0.4 full-scale amplitude.
@@ -14,6 +16,7 @@
 - Cap transitions at 1 Hz and total duration at 20 seconds.
 - Provide an immediate Escape/click exit and descriptive static text.
 - Do not use rapid strobing, unbounded loops, or patterns intended to bypass accessibility settings.
+- Never present a warning label as permission to create a seizure-inducing pattern.
 
 ## Automation
 

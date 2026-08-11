@@ -50,6 +50,12 @@ class ScoreTests(unittest.TestCase):
 
 
 class EscalationTests(unittest.TestCase):
+    def test_hard_safety_caps_cannot_reach_injury_or_strobe_ranges(self) -> None:
+        self.assertLessEqual(alert_user.MAX_VOLUME, 75)
+        self.assertLessEqual(synth_alarm.MAX_MASTER_GAIN, 0.4)
+        self.assertLessEqual(visual_pulse.MAX_RATE_HZ, 1.0)
+        self.assertLessEqual(visual_pulse.MAX_DURATION_SECONDS, 20.0)
+
     def test_level_five_degrades_without_permissions(self) -> None:
         self.assertEqual(
             alert_user.plan_for_level(5, allow_sound=False, allow_dialog=False, allow_visual=False),
