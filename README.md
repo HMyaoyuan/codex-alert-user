@@ -13,6 +13,14 @@ It starts polite. It can become gloriously difficult to ignore. It does not turn
 > [!WARNING]
 > **This project does not implement injury-oriented alerts.** It will not target hearing damage, induce seizures, set every device to maximum volume, use rapid strobing, or remove its safety limits. Loud sound and flashing light can harm people unexpectedly—including bystanders. The strongest mode is deliberately bounded, opt-in, and stoppable.
 
+### Install it by talking to Codex
+
+Send this one sentence to Codex:
+
+> Install the `alert-user` skill from https://github.com/HMyaoyuan/codex-alert-user/tree/main/alert-user
+
+That is the normal installation flow. Codex's `skill-installer` downloads the public skill into your skills directory, and it becomes available on the next turn.
+
 ### The escalation ladder
 
 | Level | What happens |
@@ -45,7 +53,9 @@ python3 alert-user/scripts/alert_user.py alert --level 1 \
 
 The scripts use only the Python standard library plus operating-system helpers such as `osascript`, `afplay`, `notify-send`, `paplay`, or `aplay` when available.
 
-### Install as a Codex skill
+### Manual installation fallback
+
+Use this only when `skill-installer` is unavailable:
 
 ```bash
 git clone https://github.com/HMyaoyuan/codex-alert-user.git
@@ -96,6 +106,14 @@ Codex 已经进入那个古老、可怕、让 AI 急得团团转的状态：**�
 > [!WARNING]
 > **本项目不会实现以伤害为目标的提醒。** 它不会以听力损伤、诱发癫痫为设计目标，不会把所有设备轮流调到最大音量，不会快速频闪，也不会移除安全上限。强声音和闪光可能意外伤害用户及旁观者。最高级模式依然是有边界、需明确授权、随时可停止的。
 
+### 对 Codex 说一句话就能安装
+
+把下面这句话发给 Codex：
+
+> 安装这个 `alert-user` skill：https://github.com/HMyaoyuan/codex-alert-user/tree/main/alert-user
+
+这样就完成了正常的安装流程。Codex 会自动调用 `skill-installer`，把公开仓库中的 skill 下载到本机 skills 目录；下一轮对话即可使用。
+
 ### 五级提醒阶梯
 
 | 级别 | 提醒方式 |
@@ -128,7 +146,9 @@ python3 alert-user/scripts/alert_user.py alert --level 1 \
 
 脚本只使用 Python 标准库，以及操作系统已有的 `osascript`、`afplay`、`notify-send`、`paplay` 或 `aplay` 等工具。
 
-### 安装为 Codex skill
+### 手动安装备用方案
+
+只有在 `skill-installer` 不可用时才需要下面这些命令：
 
 ```bash
 git clone https://github.com/HMyaoyuan/codex-alert-user.git
