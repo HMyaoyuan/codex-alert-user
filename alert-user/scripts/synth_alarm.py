@@ -37,24 +37,55 @@ SIREN_TYPES = ("wail", "yelp", "hilo")
 
 
 def default_score_path() -> Path:
-    scores_dir = Path(__file__).resolve().parent.parent / "assets" / "scores"
-    song = scores_dir / "song-music.json"
-    return song if song.exists() else scores_dir / "fire-truck-wail.json"
+    return Path(__file__).resolve().parent.parent / "assets" / "scores" / "fire-truck-wail.json"
 
 
 def score_path_for_level(level: int) -> Path:
     filename = {
-        1: "song-music.json",
-        2: "song-music.json",
         3: "fire-truck-yelp.json",
         4: "fire-truck-wail.json",
         5: "fire-truck-hilo.json",
     }.get(level, "fire-truck-yelp.json")
-    path = default_score_path().parent / filename
-    # If the user removed their song score, stages 1-2 fall back to a siren.
-    if not path.exists() and level <= 2:
-        return path.parent / "fire-truck-yelp.json"
-    return path
+    return default_score_path().parent / filename
+
+
+def audio_dir() -> Path:
+    return Path(__file__).resolve().parent.parent / "assets" / "audio"
+
+
+def audio_path_for_level(level: int) -> Path | None:
+    filename = {1: "1.mp3", 2: "2.mp3"}.get(level)
+    if filename is None:
+        return None
+    path = audio_dir() / filename
+    return path if path.exists() else None
+
+
+def audio_duration(path: Path) -> float:
+    manifest_path = path.parent / "manifest.json"
+    if manifest_path.exists():
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if path.name in manifest:
+            return float(manifest[path.name])
+    raise ValueError(f"no duration recorded for {path.name}; add it to manifest.json")
+
+
+def audio_player_command(path: Path) -> list[str] | None:
+    system = platform.system()
+    if system == "Darwin" and shutil.which("afplay"):
+        return ["afplay", str(path)]
+    if system == "Linux":
+        for player in ("mpg123", "ffplay", "paplay"):
+            if shutil.which(player):
+                return [player, str(path)]
+    return None
+
+
+def play_audio_file(path: Path) -> None:
+    command = audio_player_command(path)
+    if command is None:
+        raise RuntimeError("no supported audio player found (expected afplay, mpg123, ffplay, or paplay)")
+    subprocess.run(command, check=True)
 
 
 def _validate_notes(data: dict) -> None:

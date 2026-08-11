@@ -17,7 +17,10 @@ from pathlib import Path
 from synth_alarm import (
     MAX_REPEAT,
     MAX_TOTAL_SECONDS,
+    audio_duration,
+    audio_path_for_level,
     load_score,
+    play_audio_file,
     play_wav,
     render_wav,
     score_duration,
@@ -26,6 +29,7 @@ from synth_alarm import (
 from visual_pulse import validated_timing
 
 MAX_VOLUME = 100
+MAX_AUDIO_REPEAT = 64
 LEVEL_NAMES = {
     1: "The Serenade",
     2: "The Infinite Loop",
@@ -221,20 +225,32 @@ def alert(args: argparse.Namespace) -> dict:
         "dry_run": args.dry_run,
     }
     score = None
+    audio = None if args.score else audio_path_for_level(args.level)
     score_path = args.score or score_path_for_level(args.level)
     repeat = 1
+    audio_repeat = 0
     if args.allow_sound:
-        score = load_score(score_path)
-        one_pass = score_duration(score, 1)
-        if args.level == 1:
-            repeat = 1
-        elif args.level == 2:
-            # The Infinite Loop: repeat the song back-to-back to fill the cap.
-            repeat = max(1, min(MAX_REPEAT, int(MAX_TOTAL_SECONDS // one_pass)))
+        if audio is not None:
+            duration = audio_duration(audio)
+            # Level 1 plays the clip once per alert; level 2 loops it back-to-back.
+            audio_repeat = (
+                1
+                if args.level == 1
+                else max(1, min(MAX_AUDIO_REPEAT, int(MAX_TOTAL_SECONDS // duration)))
+            )
+            result["audio"] = audio.name
+            result["sound_duration_seconds"] = round(duration * audio_repeat, 2)
         else:
-            repeat = 3 if args.level == 3 else (4 if args.level == 4 else 6)
-        result["score"] = score.get("name", score_path.name)
-        result["sound_duration_seconds"] = round(score_duration(score, repeat), 2)
+            score = load_score(score_path)
+            one_pass = score_duration(score, 1)
+            if args.level == 1:
+                repeat = 1
+            elif args.level == 2:
+                repeat = max(1, min(MAX_REPEAT, int(MAX_TOTAL_SECONDS // one_pass)))
+            else:
+                repeat = 3 if args.level == 3 else (4 if args.level == 4 else 6)
+            result["score"] = score.get("name", score_path.name)
+            result["sound_duration_seconds"] = round(score_duration(score, repeat), 2)
     if args.level >= 5 and args.allow_visual_pulse:
         validated_timing(args.pulse_rate, args.pulse_duration)
     if args.dry_run:
@@ -282,11 +298,16 @@ def alert(args: argparse.Namespace) -> dict:
             ]
             visual_process = subprocess.Popen(command, text=True)
         if args.allow_sound:
-            wav_path = Path(tempfile.gettempdir()) / f"alert-user-{os.getpid()}.wav"
-            assert score is not None
-            render_wav(score, wav_path, repeat=repeat)
-            play_wav(wav_path)
-            result["sound_played"] = True
+            if audio is not None:
+                for _ in range(audio_repeat):
+                    play_audio_file(audio)
+                result["sound_played"] = True
+            else:
+                wav_path = Path(tempfile.gettempdir()) / f"alert-user-{os.getpid()}.wav"
+                assert score is not None
+                render_wav(score, wav_path, repeat=repeat)
+                play_wav(wav_path)
+                result["sound_played"] = True
         if args.level >= 4 and args.allow_dialog:
             result["dialog_shown"] = dialog(args.title, args.message, args.dialog_timeout)
         if visual_process:

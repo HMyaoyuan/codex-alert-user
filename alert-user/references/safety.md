@@ -4,7 +4,7 @@ This fork is configured in **maximum-intensity mode** for a single specific user
 
 - have healthy hearing and no tinnitus risk from loud computer audio,
 - have no photosensitive epilepsy or related conditions,
-- routinely wear sound-isolating earmuffs, so only genuinely loud alerts reach them.
+- work in an environment where only genuinely loud alerts reliably reach them.
 
 The caps below are still hard properties of the scripts. Do not remove or raise them further, and do not use the loud or strobing modes around bystanders, children, pets, or anyone who has not made the same attestation.
 

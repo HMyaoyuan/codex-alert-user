@@ -79,16 +79,16 @@ class ScoreTests(unittest.TestCase):
         for path in paths:
             self.assertTrue(path.exists())
 
-    def test_stages_one_and_two_use_the_song_score(self) -> None:
-        first = synth_alarm.score_path_for_level(1)
-        second = synth_alarm.score_path_for_level(2)
-        self.assertEqual(first, second)
-        self.assertTrue(first.exists())
-        score = synth_alarm.load_score(first)
-        self.assertIn("notes", score)
-        # The Infinite Loop must be able to repeat the song within the cap.
-        one_pass = synth_alarm.score_duration(score, 1)
-        self.assertLessEqual(one_pass, synth_alarm.MAX_TOTAL_SECONDS)
+    def test_stages_one_and_two_have_audio_clips(self) -> None:
+        first = synth_alarm.audio_path_for_level(1)
+        second = synth_alarm.audio_path_for_level(2)
+        self.assertIsNotNone(first)
+        self.assertIsNotNone(second)
+        self.assertNotEqual(first, second)
+        for path in (first, second):
+            self.assertTrue(path.exists())
+            # The Infinite Loop must be able to repeat the clip within the cap.
+            self.assertLessEqual(synth_alarm.audio_duration(path), synth_alarm.MAX_TOTAL_SECONDS)
 
 
 class EscalationTests(unittest.TestCase):

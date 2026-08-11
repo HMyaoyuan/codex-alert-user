@@ -5,7 +5,7 @@ description: Escalate user-attention reminders when Codex is blocked waiting for
 
 # Alert User
 
-Escalate from a quiet notification to a loud, intense, bounded audiovisual attention burst. This fork is configured for a user who attested to healthy hearing, no photosensitivity, and who wears sound-isolating earmuffs — so the top levels are deliberately extreme: full-scale fire-truck sirens, 100% temporary system volume, and a rapid full-screen strobe.
+Escalate from a quiet notification to a loud, intense, bounded audiovisual attention burst. The user attested to healthy hearing and no photosensitivity — so the top levels are deliberately extreme: full-scale fire-truck sirens, 100% temporary system volume, and a rapid full-screen strobe.
 
 ## The Five Stages
 
@@ -13,11 +13,41 @@ Levels have names, because numbers are not urgent enough:
 
 | Level | Name | Channels added |
 | --- | --- | --- |
-| 1 | The Serenade | Native notification plus the bundled song played once |
-| 2 | The Infinite Loop | Bring the task app forward; the song loops back-to-back up to 5 minutes |
+| 1 | The Serenade | Native notification plus the bundled audio clip played once |
+| 2 | The Infinite Loop | Bring the task app forward; the second audio clip loops back-to-back |
 | 3 | Fire Truck Incoming | Synthesized fire-truck yelp siren |
 | 4 | Citywide Meltdown | Bounded dialog plus repeated fire-truck wail |
 | 5 | TOTAL APOCALYPSE | Hi-lo siren at up to 100% volume plus a full-screen 16-24 Hz strobe |
+
+## When to Alert
+
+Alert only when ALL of these hold:
+
+1. A user-authorized persistent task is blocked on a manual step only the user can do: a confirmation, approval, credential entry, login, browser interaction, hardware action, or similar.
+2. The blocker is still unresolved — check first, every time.
+3. The user has not responded since the blocker was raised.
+
+Never alert for ordinary progress updates, finished steps, or anything the task can resolve on its own. One blocker, one heartbeat, no duplicate timers.
+
+## Escalation Cadence
+
+While a stage goes unanswered, repeat its alert at the stage's rhythm, then escalate exactly one stage. Thirty minutes without a response means TOTAL APOCALYPSE.
+
+| Stage | Repeat alert every | Escalate after | Total elapsed |
+| --- | --- | --- | --- |
+| 1 The Serenade | 3 minutes | 6 minutes (2 unanswered) | 6 min |
+| 2 The Infinite Loop | 4 minutes | 8 minutes (2 unanswered) | 14 min |
+| 3 Fire Truck Incoming | 4 minutes | 8 minutes (2 unanswered) | 22 min |
+| 4 Citywide Meltdown | 4 minutes | 8 minutes (2 unanswered) | 30 min |
+| 5 TOTAL APOCALYPSE | 5 minutes, at most 3 bursts | Then back off to one reminder every 15 minutes | — |
+
+Rules:
+
+1. Start at stage 1 unless the user explicitly requested a starting stage.
+2. Escalate by at most one stage per unanswered interval. Never skip a stage.
+3. Record the current stage and the next allowed alert time in the task message so the heartbeat can resume correctly.
+4. Any user response pauses escalation; an explicit confirmation stops the heartbeat immediately, restores any changed volume or output device, and ends the sequence.
+5. If the response is ambiguous, hold the current stage and ask one concise question in chat.
 
 ## Workflow
 
@@ -29,9 +59,9 @@ Levels have names, because numbers are not urgent enough:
    python3 scripts/alert_user.py preflight
    ```
 
-4. Read [references/escalation.md](references/escalation.md) and select the lowest sufficient level.
+4. Follow the escalation cadence above; read [references/escalation.md](references/escalation.md) for the heartbeat prompt invariants.
 5. Preview every level 3-5 invocation with `--dry-run` before running it.
-6. Send one alert, report the channel used, and wait for the configured interval. Escalate by at most one level after an unanswered interval.
+6. Send one alert, report the channel used, and wait for the stage's interval before alerting again or escalating.
 7. For recurring reminders, create or update one thread heartbeat. Do not create duplicate timers. Its prompt must check for confirmation first and disable itself immediately after confirmation.
 8. After the user confirms, stop the heartbeat, stop active alert processes, restore any changed volume or output device, and report completion.
 
@@ -72,7 +102,7 @@ Read [references/safety.md](references/safety.md) before changing volume, select
 
 ## Scores
 
-The synthesized alarm reads JSON scores. Levels 1-2 select the bundled song score (`song-music.json`, user-supplied, license `NOASSERTION`); levels 3-5 select bundled original fire-truck siren scores (yelp, wail, hi-lo) rendered with a harsh harmonic-rich waveform at near full scale. Pass a user-owned/licensed score with `--score PATH`. Do not fetch or reconstruct copyrighted melodies. Musical notation is still protected expression; a score is not a copyright workaround.
+The synthesized alarm reads JSON scores. Levels 1-2 play the bundled MP3 clips (`assets/audio/1.mp3`, `assets/audio/2.mp3`) through the OS player; levels 3-5 select bundled original fire-truck siren scores (yelp, wail, hi-lo) rendered with a harsh harmonic-rich waveform at near full scale. Pass a user-owned/licensed score with `--score PATH`. Do not fetch or reconstruct copyrighted melodies. Musical notation is still protected expression; a score is not a copyright workaround.
 
 ```bash
 python3 scripts/synth_alarm.py --score assets/scores/fire-truck-wail.json --output /tmp/alert-user.wav

@@ -25,7 +25,7 @@
 
 Codex has reached the ancient and terrifying state known as: **waiting for you to click one button**.
 
-Most notification tools are designed to be "unobtrusive". This one was built for a very specific person: a developer who wears **sound-isolating earmuffs**, whose hearing is perfectly healthy, and who **loses real income** every time a polite little "ding" fails to penetrate the foam.
+Most notification tools are designed to be "unobtrusive". This one was built for people who keep missing alerts anyway: deep-focus work, noisy rooms, speakers that might as well be off. When a polite little "ding" fails, the task sits there and waits.
 
 For that person, subtlety is not a feature. **Subtlety is a pay cut.**
 
@@ -37,13 +37,29 @@ Forget "levels". Each stage has a name, because numbers are not urgent enough:
 
 | Stage | Name | What happens | What it sounds like |
 | --- | --- | --- | --- |
-| 1 | **The Serenade** | Native notification, plus your bundled song (`music`) played once when sound is allowed | An actual melody. Civilized. Almost friendly. |
-| 2 | **The Infinite Loop** | Notification, Codex jumps to the foreground, and the song repeats back-to-back for up to 5 minutes | The same song. Again. And again. And again. |
+| 1 | **The Serenade** | Native notification, plus the bundled `1.mp3` clip played once when sound is allowed | A polite 5-second audio clip. Civilized. Almost friendly. |
+| 2 | **The Infinite Loop** | Notification, Codex jumps to the foreground, and `2.mp3` loops back-to-back for up to 5 minutes | A one-minute clip. Again. And again. And again. |
 | 3 | **Fire Truck Incoming** | Adds the fire-truck **yelp** siren | A fast sweep, 600↔1600 Hz twice per second. Urgent. |
 | 4 | **Citywide Meltdown** | Adds a confirmation dialog and the fire-truck **wail** siren | A slow, deep 3-second sweep, 500↔1700 Hz. Menacing. |
 | 5 | **TOTAL APOCALYPSE** | Everything at once: dialog, foreground takeover, **hi-lo** siren at up to 100% volume for ~50 seconds, full-screen strobe at up to **24 Hz** | Two hard-switching tones (660/990 Hz), the classic European fire engine. Plus your screen seizing in red, black, white, and yellow. There is no level 6 because there is nothing left. |
 
 Each channel has its own permission flag. Sound, temporary volume changes, device switching, and the visual strobe are never inferred from a generic "remind me" request. The CLI still takes `--level 1` through `--level 5` — the drama is in the output.
+
+### When it fires, and how fast it escalates
+
+It only fires when a task is genuinely stuck on something only you can do — a confirmation, an approval, a credential, a browser step, a hardware action. Ordinary progress updates do not qualify.
+
+While a stage goes unanswered, it re-alerts at that stage's rhythm, then escalates exactly one stage:
+
+| Stage | Re-alerts every | Escalates after | Total elapsed |
+| --- | --- | --- | --- |
+| 1 The Serenade | 3 minutes | 6 minutes (2 unanswered) | 6 min |
+| 2 The Infinite Loop | 4 minutes | 8 minutes (2 unanswered) | 14 min |
+| 3 Fire Truck Incoming | 4 minutes | 8 minutes (2 unanswered) | 22 min |
+| 4 Citywide Meltdown | 4 minutes | 8 minutes (2 unanswered) | 30 min |
+| 5 TOTAL APOCALYPSE | 5 minutes, at most 3 bursts | Then one reminder every 15 minutes | — |
+
+Thirty minutes of silence means TOTAL APOCALYPSE. Any reply pauses the ladder; a confirmation stops it instantly and restores your volume.
 
 ### Install it by talking to Codex
 
@@ -74,7 +90,7 @@ The scripts use only the Python standard library plus operating-system helpers s
 ### The warnings are real (this part is not a joke)
 
 - **Photosensitive epilepsy: do not use the visual strobe, at all, ever.** The 8-24 Hz range sits squarely inside the known risk band. This project is configured for one specific user who attested they do not have photosensitivity. If that is not you, or anyone else might see your screen, never pass `--allow-visual-pulse`.
-- **Hearing:** level 3+ synthesizes audio near full scale and level 5 may temporarily set system volume to 100%. Built for a user with healthy hearing behind industrial earmuffs. Volume is always restored afterwards, but your relationship with your roommates may not be.
+- **Hearing:** level 3+ synthesizes audio near full scale and level 5 may temporarily set system volume to 100%. Volume is always restored afterwards, but your relationship with your roommates may not be.
 - The visual strobe always has an instant off-switch: **Escape or any mouse click** kills it.
 - Devices are inspected but never rotated automatically; headphones, hearing aids, and virtual meeting devices are never selected on their own.
 - Recurring reminders live in one stoppable Codex heartbeat, not a hidden daemon. Any response from the user pauses escalation; confirmation stops it.
@@ -93,9 +109,9 @@ Restart Codex or begin a new task so the skill metadata is discovered.
 
 ### About the scores
 
-The repository ships score data, not an MP3. Stages 1-2 play a bundled note score (`song-music.json`, the `music` score), and stages 3-5 play three bundled fire-truck sirens (yelp, wail, hi-lo) rendered at runtime with a harsh harmonic-rich waveform, peak-normalized to 0.95 full scale. You can supply another JSON score that you own or are licensed to use with `--score PATH`.
+The repository ships both audio clips and score data. Stages 1-2 play bundled MP3 clips (`assets/audio/1.mp3`, `assets/audio/2.mp3`), and stages 3-5 play three bundled fire-truck sirens (yelp, wail, hi-lo) rendered at runtime with a harsh harmonic-rich waveform, peak-normalized to 0.95 full scale. You can supply another JSON score that you own or are licensed to use with `--score PATH`.
 
-One honest note: the sirens are original CC0 scores; `song-music.json` is user-supplied and its license field says `NOASSERTION`. A converter writing "CC0 format" into a filename does not relicense the underlying melody. If you fork this repo, make sure you have the right to redistribute every score you ship — that door has been checked, and it is not a loophole.
+One honest note: the sirens are original CC0 scores. If you replace the bundled MP3s or add your own scores, make sure you have the right to use and redistribute them. A converter writing "CC0 format" into a filename does not relicense the underlying melody — that door has been checked, and it is not a loophole.
 
 ### Development
 
@@ -111,37 +127,51 @@ MIT licensed. The original bundled scores are additionally marked CC0-1.0.
 
 ## 中文
 
-Codex 已经进入那个古老、可怕、让 AI 急得团团转的状态：**只差你回来点一下按钮**。
+Codex 又卡住了。卡在那种最原始、最让人没脾气的状态：**等你回来点一个按钮**。
 
-市面上大多数提醒工具的设计目标是"不打扰"。这个项目不是。它为一位非常具体的用户而生：一个平时戴着**隔音耳罩**、听力完全健康、并且每一次被"叮"一声礼貌地失败、都会**真金白银损失收入**的开发者。
+市面上的提醒工具，个个把"不打扰"当美德。这个项目不管这套。它就是给"提醒了也看不见"的场景准备的：干活干得太投入、环境太吵、音箱跟没开一样。轻轻"叮"一声没用，任务就在那儿干等。
 
-对这个人来说，温柔不是优点。**温柔等于扣工资。**
+所以它的思路很朴素：你不回来，它就一级一级加码，加到你回来为止。
 
-`alert-user` 是一个渐进式提醒的 Codex skill：当一个经过授权的持续任务卡在确认、审批、登录、浏览器操作、硬件操作等人工步骤时，它会从礼貌通知一路升级到全面的视听紧急状态。
+### 五个阶段
 
-### "你在哪"的五个阶段
+每个阶段都有名字，因为光报数字实在不够着急：
 
-不叫"层级"了，数字不够着急。每个阶段都有名字：
-
-| 阶段 | 名称 | 会发生什么 | 听起来像什么 |
+| 阶段 | 名称 | 会做什么 | 听起来什么效果 |
 | --- | --- | --- | --- |
-| 1 | **点歌台** | 系统通知，授权声音后把内置的歌（`music`）完整放一遍 | 一首真正的歌。文明，甚至有点友好。 |
-| 2 | **单曲循环** | 通知 + Codex 跳到前台，同一首歌首尾相接循环最长 5 分钟 | 同一首歌。一遍。又一遍。再一遍。 |
-| 3 | **消防车出警** | 加入消防车 **yelp** 急促警笛 | 每秒两个来回的快速扫频（600↔1600 Hz）。催命。 |
-| 4 | **全城警报** | 加入确认弹窗 + 消防车 **wail** 长鸣 | 3 秒一个来回的低沉长鸣（500↔1700 Hz）。压迫感。 |
-| 5 | **世界末日** | 全部一起上：弹窗、前台接管、满音量 **hi-lo** 警笛约 50 秒、最高 **24 Hz** 全屏爆闪 | 两个音硬切换的欧式消防车（660/990 Hz），加上你的屏幕在红黑白黄里抽搐。没有第 6 级，因为没有东西了。 |
+| 1 | **点歌台** | 系统通知；允许出声的话，把内置的 `1.mp3` 放一遍 | 一段 5 秒的小音频，客客气气 |
+| 2 | **单曲循环** | 通知，Codex 跳到前台，`2.mp3` 首尾相接循环着放 | 一段一分钟的音频来回放，放到你嫌烦为止 |
+| 3 | **消防车出警** | 上面这些之外，加消防车 yelp 警笛 | 每秒两个来回的扫频（600↔1600 Hz），催命 |
+| 4 | **全城警报** | 再加确认弹窗和消防车 wail 长鸣 | 三秒一个来回的低沉长鸣（500↔1700 Hz），压迫感 |
+| 5 | **世界末日** | 全上：弹窗、前台接管、满音量 hi-lo 警笛 50 秒、最高 24 Hz 全屏爆闪 | 欧式消防车那种"滴嘟滴嘟"（660/990 Hz 硬切换），屏幕在红黑白黄里抽搐。没有第六级，没东西了 |
 
-每种通道都有独立的授权开关。只说"提醒我"，不会自动获得声音、临时改音量、切换输出设备或视觉爆闪的权限。CLI 参数仍然是 `--level 1` 到 `--level 5`——戏剧性体现在输出里。
+每种通道都要单独授权。你只说一句"提醒我"，它不会自作主张开声音、改音量、切设备或者闪屏幕。命令行参数还是 `--level 1` 到 `--level 5`，戏都在名字和动静里。
 
-### 对 Codex 说一句话就能安装
+### 什么时候响，多久升一级
 
-把下面这句话发给 Codex：
+只有任务真的卡住、必须你本人动手的时候它才响：点确认、过审批、输凭据、操作浏览器、动硬件，诸如此类。普通的进度汇报不配响。
+
+没人理它的时候，每个阶段按自己的节奏反复提醒，等够了就升一级，一次只升一级：
+
+| 阶段 | 每隔多久提醒一次 | 没人理就升级 | 累计等了 |
+| --- | --- | --- | --- |
+| 1 点歌台 | 3 分钟 | 6 分钟（两次没理） | 6 分钟 |
+| 2 单曲循环 | 4 分钟 | 8 分钟（两次没理） | 14 分钟 |
+| 3 消防车出警 | 4 分钟 | 8 分钟（两次没理） | 22 分钟 |
+| 4 全城警报 | 4 分钟 | 8 分钟（两次没理） | 30 分钟 |
+| 5 世界末日 | 5 分钟，最多三轮 | 之后每 15 分钟提醒一次 | — |
+
+三十分钟没人回来，世界末日。你随便回一句话它就暂停；确认了，它立刻收工，音量什么的都恢复原样。
+
+### 怎么装
+
+对 Codex 说一句话就行：
 
 > 安装这个 `alert-user` skill：https://github.com/HMyaoyuan/codex-alert-user/tree/main/alert-user
 
-这样就完成了正常的安装流程。Codex 会自动调用 `skill-installer`，把公开仓库中的 skill 下载到本机 skills 目录；下一轮对话即可使用。
+它自己会走 `skill-installer` 把 skill 下载到本机，下一轮对话就能用。
 
-### 先演习，不要突然吓自己
+### 先演习，别吓着自己
 
 ```bash
 python3 alert-user/scripts/alert_user.py preflight --json
@@ -149,7 +179,7 @@ python3 alert-user/scripts/alert_user.py alert --level 5 \
   --allow-sound --allow-dialog --allow-visual-pulse --dry-run
 ```
 
-发送一次真正但温柔的通知：
+发一次正经但安静的通知：
 
 ```bash
 python3 alert-user/scripts/alert_user.py alert --level 1 \
@@ -157,19 +187,19 @@ python3 alert-user/scripts/alert_user.py alert --level 1 \
   --message "请回来确认结果。"
 ```
 
-脚本只使用 Python 标准库，以及操作系统已有的 `osascript`、`afplay`、`notify-send`、`paplay` 或 `aplay` 等工具。
+脚本只用 Python 标准库，播放器用的是系统自带的 `afplay`（macOS）或 `mpg123`、`ffplay`、`paplay`（Linux），通知走 `osascript` 或 `notify-send`。
 
-### 警告是认真的（这一段不是玩笑）
+### 丑话说在前头（这段是认真的）
 
-- **光敏癫痫患者：永远、绝对、不要使用视觉爆闪。** 8-24 Hz 正好落在已知风险区间的正中央。本项目是为一位明确确认自己没有光敏问题的用户调校的。如果那个人不是你，或者你的屏幕可能被其他人看到，永远不要加 `--allow-visual-pulse`。
-- **听力：** 第 3 级以上合成音频接近满幅，第 5 级可能把系统音量临时拉到 100%。这是为"健康听力 + 工业级耳罩"的用户设计的。音量结束后一定会恢复，但你和室友的关系不一定。
-- 视觉爆闪永远有一键关闭：**按 Escape 或随便点一下鼠标**立刻消失。
-- 输出设备只检查、不自动轮换；绝不自动选择耳机、助听器或会议软件虚拟设备。
-- 持续提醒只存在于一个可停止的 Codex heartbeat 里，不是隐藏的后台进程。你有任何回应就暂停升级；确认后立即停止。
+- **光敏癫痫患者别用视觉爆闪，一次都别。** 8-24 Hz 正卡在已知风险区间里。这个项目是按"用户本人确认过没有光敏问题"调的。不是你本人用，或者屏幕边上有别人，就永远别加 `--allow-visual-pulse`。
+- **听力：** 3 级往上合成音频接近满幅，5 级会把系统音量临时拉到 100%。音量用完会恢复，你和室友的关系自己看着办。
+- 爆闪随时能关：**Esc 或者鼠标点一下**，立刻停。
+- 设备只读不折腾：不会自动轮换输出，不会自动选耳机、助听器、会议虚拟设备。
+- 循环提醒跑在一个可以随时停止的 heartbeat 里，不是藏起来的后台进程。
 
-### 手动安装备用方案
+### 手动装（备用）
 
-只有在 `skill-installer` 不可用时才需要下面这些命令：
+`skill-installer` 不可用的时候再用这个：
 
 ```bash
 git clone https://github.com/HMyaoyuan/codex-alert-user.git
@@ -177,15 +207,15 @@ mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
 ln -s "$PWD/codex-alert-user/alert-user" "${CODEX_HOME:-$HOME/.codex}/skills/alert-user"
 ```
 
-重启 Codex 或新建一个任务，让 Codex 重新发现 skill 元数据。
+重启 Codex 或者新开一个任务，让它重新发现 skill。
 
-### 关于"谱子"
+### 关于声音素材
 
-仓库内置的是谱子数据，不是 MP3。第 1-2 阶段播放内置音符谱子（`song-music.json`，名为 `music` 的歌），第 3-5 阶段播放三套消防车警笛（yelp 急促、wail 长鸣、hi-lo 双音），运行时用谐波叠层的刺耳波形合成 WAV，并做了 0.95 满幅的峰值归一化。你也可以用 `--score PATH` 传入自己拥有版权或使用授权的 JSON 谱子。
+第 1、2 阶段放的是仓库自带的两个 MP3（`assets/audio/1.mp3`、`2.mp3`）。第 3-5 阶段不放现成音频，是运行时现合成的消防车警笛：一段谐波叠层的刺耳波形，峰值归一化到 0.95 满幅。想换自己的声音，可以用 `--score PATH` 传 JSON 谱子。
 
-一句实话：三套警笛是原创 CC0 谱子；`song-music.json` 是用户自己提供的，license 字段写的是 `NOASSERTION`。转谱工具在文件名里写"CC0 格式"，并不会改变底层旋律的版权归属。如果你要 fork 这个仓库，请确认你有权再分发你提交的每一份谱子——这扇门检查过了，不是漏洞。
+一句实话：三套警笛谱子是原创 CC0；你要替换 MP3 或者谱子的话，确认你有权使用、有权再分发。转谱工具在文件名里写"CC0 格式"，改变不了旋律本身的版权归属。
 
-### 开发与验证
+### 开发
 
 ```bash
 python3 -m unittest discover -s tests -v
@@ -193,4 +223,4 @@ python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py alert-us
 du -sh .
 ```
 
-代码采用 MIT 许可证；仓库内置的原创谱子额外采用 CC0-1.0。
+代码 MIT 许可；原创警笛谱子额外标注 CC0-1.0。
