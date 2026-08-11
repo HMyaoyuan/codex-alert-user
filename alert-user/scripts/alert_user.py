@@ -14,13 +14,21 @@ import sys
 import tempfile
 from pathlib import Path
 
-from synth_alarm import load_score, play_wav, render_wav, score_duration, score_path_for_level
+from synth_alarm import (
+    MAX_REPEAT,
+    MAX_TOTAL_SECONDS,
+    load_score,
+    play_wav,
+    render_wav,
+    score_duration,
+    score_path_for_level,
+)
 from visual_pulse import validated_timing
 
 MAX_VOLUME = 100
 LEVEL_NAMES = {
-    1: "The Polite Cough",
-    2: "The Desk Slam",
+    1: "The Serenade",
+    2: "The Infinite Loop",
     3: "Fire Truck Incoming",
     4: "Citywide Meltdown",
     5: "TOTAL APOCALYPSE",
@@ -192,10 +200,9 @@ def switch_macos_device(name: str) -> None:
 
 def plan_for_level(level: int, allow_sound: bool, allow_dialog: bool, allow_visual: bool) -> list[str]:
     actions = ["notification"]
+    actions.append("synthesized-sound" if allow_sound else "sound-skipped-no-permission")
     if level >= 2:
         actions.append("activate-app")
-    if level >= 3:
-        actions.append("synthesized-sound" if allow_sound else "sound-skipped-no-permission")
     if level >= 4:
         actions.append("dialog" if allow_dialog else "dialog-skipped-no-permission")
     if level >= 5:
@@ -215,9 +222,17 @@ def alert(args: argparse.Namespace) -> dict:
     }
     score = None
     score_path = args.score or score_path_for_level(args.level)
-    repeat = 3 if args.level == 3 else (4 if args.level == 4 else 6)
-    if args.level >= 3 and args.allow_sound:
+    repeat = 1
+    if args.allow_sound:
         score = load_score(score_path)
+        one_pass = score_duration(score, 1)
+        if args.level == 1:
+            repeat = 1
+        elif args.level == 2:
+            # The Infinite Loop: repeat the song back-to-back to fill the cap.
+            repeat = max(1, min(MAX_REPEAT, int(MAX_TOTAL_SECONDS // one_pass)))
+        else:
+            repeat = 3 if args.level == 3 else (4 if args.level == 4 else 6)
         result["score"] = score.get("name", score_path.name)
         result["sound_duration_seconds"] = round(score_duration(score, repeat), 2)
     if args.level >= 5 and args.allow_visual_pulse:
@@ -266,7 +281,7 @@ def alert(args: argparse.Namespace) -> dict:
                 str(args.pulse_duration),
             ]
             visual_process = subprocess.Popen(command, text=True)
-        if args.level >= 3 and args.allow_sound:
+        if args.allow_sound:
             wav_path = Path(tempfile.gettempdir()) / f"alert-user-{os.getpid()}.wav"
             assert score is not None
             render_wav(score, wav_path, repeat=repeat)
@@ -304,7 +319,7 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         choices=range(1, 6),
         default=1,
-        help="1=The Polite Cough, 2=The Desk Slam, 3=Fire Truck Incoming, "
+        help="1=The Serenade, 2=The Infinite Loop, 3=Fire Truck Incoming, "
         "4=Citywide Meltdown, 5=TOTAL APOCALYPSE",
     )
     alert_parser.add_argument("--title", default="Codex needs your attention")

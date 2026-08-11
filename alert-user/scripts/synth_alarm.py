@@ -24,7 +24,7 @@ import wave
 from pathlib import Path
 
 SAMPLE_RATE = 44_100
-MAX_TOTAL_SECONDS = 60.0
+MAX_TOTAL_SECONDS = 300.0
 MAX_REPEAT = 8
 MIN_FREQUENCY = 80.0
 MAX_FREQUENCY = 4_000.0
@@ -37,16 +37,24 @@ SIREN_TYPES = ("wail", "yelp", "hilo")
 
 
 def default_score_path() -> Path:
-    return Path(__file__).resolve().parent.parent / "assets" / "scores" / "fire-truck-wail.json"
+    scores_dir = Path(__file__).resolve().parent.parent / "assets" / "scores"
+    song = scores_dir / "song-music.json"
+    return song if song.exists() else scores_dir / "fire-truck-wail.json"
 
 
 def score_path_for_level(level: int) -> Path:
     filename = {
+        1: "song-music.json",
+        2: "song-music.json",
         3: "fire-truck-yelp.json",
         4: "fire-truck-wail.json",
         5: "fire-truck-hilo.json",
     }.get(level, "fire-truck-yelp.json")
-    return default_score_path().parent / filename
+    path = default_score_path().parent / filename
+    # If the user removed their song score, stages 1-2 fall back to a siren.
+    if not path.exists() and level <= 2:
+        return path.parent / "fire-truck-yelp.json"
+    return path
 
 
 def _validate_notes(data: dict) -> None:
@@ -64,8 +72,8 @@ def _validate_notes(data: dict) -> None:
             raise ValueError(f"note {index} frequency is outside {MIN_FREQUENCY}-{MAX_FREQUENCY} Hz")
         if not 0.02 <= duration <= MAX_NOTE_SECONDS:
             raise ValueError(f"note {index} duration is outside 0.02-{MAX_NOTE_SECONDS} seconds")
-        if not 0 <= gap <= 1.0:
-            raise ValueError(f"note {index} gap is outside 0-1 seconds")
+        if not 0 <= gap <= 20.0:
+            raise ValueError(f"note {index} gap is outside 0-20 seconds")
         if not 0 < gain <= 1.0:
             raise ValueError(f"note {index} gain is outside 0-1")
 

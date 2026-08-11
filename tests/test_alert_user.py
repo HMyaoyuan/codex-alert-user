@@ -79,6 +79,17 @@ class ScoreTests(unittest.TestCase):
         for path in paths:
             self.assertTrue(path.exists())
 
+    def test_stages_one_and_two_use_the_song_score(self) -> None:
+        first = synth_alarm.score_path_for_level(1)
+        second = synth_alarm.score_path_for_level(2)
+        self.assertEqual(first, second)
+        self.assertTrue(first.exists())
+        score = synth_alarm.load_score(first)
+        self.assertIn("notes", score)
+        # The Infinite Loop must be able to repeat the song within the cap.
+        one_pass = synth_alarm.score_duration(score, 1)
+        self.assertLessEqual(one_pass, synth_alarm.MAX_TOTAL_SECONDS)
+
 
 class EscalationTests(unittest.TestCase):
     def test_intensity_caps_match_maximum_mode(self) -> None:
@@ -98,12 +109,16 @@ class EscalationTests(unittest.TestCase):
             alert_user.plan_for_level(5, allow_sound=False, allow_dialog=False, allow_visual=False),
             [
                 "notification",
-                "activate-app",
                 "sound-skipped-no-permission",
+                "activate-app",
                 "dialog-skipped-no-permission",
                 "visual-skipped-no-permission",
             ],
         )
+
+    def test_song_plays_from_stage_one_with_sound_permission(self) -> None:
+        actions = alert_user.plan_for_level(1, allow_sound=True, allow_dialog=False, allow_visual=False)
+        self.assertEqual(actions, ["notification", "synthesized-sound"])
 
     def test_level_five_enables_only_explicit_channels(self) -> None:
         actions = alert_user.plan_for_level(5, allow_sound=True, allow_dialog=True, allow_visual=True)

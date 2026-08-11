@@ -4,8 +4,8 @@ Use the lowest stage that can reasonably reach the user. Escalate only after the
 
 | Level | Name | Channels | Earliest escalation | Permission |
 | --- | --- | --- | --- | --- |
-| 1 | The Polite Cough | Chat plus native notification | Immediate | Persistent-reminder permission |
-| 2 | The Desk Slam | Level 1 plus bring the task app forward | 5 minutes | Persistent-reminder permission |
+| 1 | The Serenade | Chat plus native notification, plus the bundled song once when sound is allowed | Immediate | Persistent-reminder permission; sound needs explicit opt-in |
+| 2 | The Infinite Loop | Level 1 plus bring the task app forward; the song loops back-to-back up to 5 minutes | 5 minutes | Explicit sound permission |
 | 3 | Fire Truck Incoming | Level 2 plus a fire-truck yelp siren burst | 10 minutes | Explicit sound permission |
 | 4 | Citywide Meltdown | Level 3 plus a bounded dialog and a repeated fire-truck wail | 15 minutes | Explicit sound and dialog permission |
 | 5 | TOTAL APOCALYPSE | Level 4 plus a full-screen 16-24 Hz high-contrast strobe for up to 60 seconds and the hi-lo siren at full volume | 20 minutes | Explicit sound and visual-pulse permission |

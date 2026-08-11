@@ -13,8 +13,8 @@ Levels have names, because numbers are not urgent enough:
 
 | Level | Name | Channels added |
 | --- | --- | --- |
-| 1 | The Polite Cough | Native notification |
-| 2 | The Desk Slam | Bring the task app forward |
+| 1 | The Serenade | Native notification plus the bundled song played once |
+| 2 | The Infinite Loop | Bring the task app forward; the song loops back-to-back up to 5 minutes |
 | 3 | Fire Truck Incoming | Synthesized fire-truck yelp siren |
 | 4 | Citywide Meltdown | Bounded dialog plus repeated fire-truck wail |
 | 5 | TOTAL APOCALYPSE | Hi-lo siren at up to 100% volume plus a full-screen 16-24 Hz strobe |
@@ -43,13 +43,16 @@ Resolve paths relative to this skill directory.
 # Inspect audio outputs, default device, mute state, volume, and available helpers.
 python3 scripts/alert_user.py preflight --json
 
-# Level 1: native notification only.
-python3 scripts/alert_user.py alert --level 1 --title "Action needed" --message "Please confirm the result."
+# Level 1 (The Serenade): notification; with sound consent, play the bundled song once.
+python3 scripts/alert_user.py alert --level 1 --allow-sound --title "Action needed" --message "Please confirm the result."
 
-# Level 3: foreground notification plus synthesized sound, after sound consent.
+# Level 2 (The Infinite Loop): bring the app forward and loop the song nonstop.
+python3 scripts/alert_user.py alert --level 2 --allow-sound --title "Still waiting" --message "Please return and confirm."
+
+# Level 3 (Fire Truck Incoming): foreground notification plus the yelp siren.
 python3 scripts/alert_user.py alert --level 3 --allow-sound --title "Still waiting" --message "Please return and confirm."
 
-# Level 5 preview. Visual and volume permissions are intentionally explicit.
+# Level 5 (TOTAL APOCALYPSE) preview. Visual and volume permissions are intentionally explicit.
 python3 scripts/alert_user.py alert --level 5 --allow-sound --allow-dialog --allow-visual-pulse --dry-run
 ```
 
@@ -69,7 +72,7 @@ Read [references/safety.md](references/safety.md) before changing volume, select
 
 ## Scores
 
-The synthesized alarm reads JSON scores. Levels 3-5 select bundled original fire-truck siren scores (yelp, wail, hi-lo) rendered with a harsh harmonic-rich waveform at near full scale. Legacy discrete `notes` scores are still supported; pass a user-owned/licensed score with `--score PATH`. Do not fetch or reconstruct copyrighted melodies. Musical notation is still protected expression; a score is not a copyright workaround.
+The synthesized alarm reads JSON scores. Levels 1-2 select the bundled song score (`song-music.json`, user-supplied, license `NOASSERTION`); levels 3-5 select bundled original fire-truck siren scores (yelp, wail, hi-lo) rendered with a harsh harmonic-rich waveform at near full scale. Pass a user-owned/licensed score with `--score PATH`. Do not fetch or reconstruct copyrighted melodies. Musical notation is still protected expression; a score is not a copyright workaround.
 
 ```bash
 python3 scripts/synth_alarm.py --score assets/scores/fire-truck-wail.json --output /tmp/alert-user.wav

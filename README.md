@@ -35,13 +35,13 @@ For that person, subtlety is not a feature. **Subtlety is a pay cut.**
 
 Forget "levels". Each stage has a name, because numbers are not urgent enough:
 
-| Stage | Name | What happens |
-| --- | --- | --- |
-| 1 | **The Polite Cough** | Native notification. "Ahem." |
-| 2 | **The Desk Slam** | Notification, and Codex jumps to the foreground. |
-| 3 | **Fire Truck Incoming** | Adds a synthesized fire-truck **yelp** siren. Your earmuffs start to notice. |
-| 4 | **Citywide Meltdown** | Adds a confirmation dialog and a repeated fire-truck **wail**. Your neighbors start to notice. |
-| 5 | **TOTAL APOCALYPSE** | Everything at once: dialog, foreground takeover, the **hi-lo** siren at up to 100% volume for ~50 seconds, and a full-screen red/black/white/yellow strobe at up to **24 Hz**. There is no level 6 because there is nothing left. |
+| Stage | Name | What happens | What it sounds like |
+| --- | --- | --- | --- |
+| 1 | **The Serenade** | Native notification, plus your bundled song (`music`) played once when sound is allowed | An actual melody. Civilized. Almost friendly. |
+| 2 | **The Infinite Loop** | Notification, Codex jumps to the foreground, and the song repeats back-to-back for up to 5 minutes | The same song. Again. And again. And again. |
+| 3 | **Fire Truck Incoming** | Adds the fire-truck **yelp** siren | A fast sweep, 600↔1600 Hz twice per second. Urgent. |
+| 4 | **Citywide Meltdown** | Adds a confirmation dialog and the fire-truck **wail** siren | A slow, deep 3-second sweep, 500↔1700 Hz. Menacing. |
+| 5 | **TOTAL APOCALYPSE** | Everything at once: dialog, foreground takeover, **hi-lo** siren at up to 100% volume for ~50 seconds, full-screen strobe at up to **24 Hz** | Two hard-switching tones (660/990 Hz), the classic European fire engine. Plus your screen seizing in red, black, white, and yellow. There is no level 6 because there is nothing left. |
 
 Each channel has its own permission flag. Sound, temporary volume changes, device switching, and the visual strobe are never inferred from a generic "remind me" request. The CLI still takes `--level 1` through `--level 5` — the drama is in the output.
 
@@ -91,11 +91,11 @@ ln -s "$PWD/codex-alert-user/alert-user" "${CODEX_HOME:-$HOME/.codex}/skills/ale
 
 Restart Codex or begin a new task so the skill metadata is discovered.
 
-### About the siren "scores"
+### About the scores
 
-The repository ships score data, not an MP3. The three bundled fire-truck sirens (yelp, wail, hi-lo) are original CC0 scores rendered into WAV data at runtime with a harsh harmonic-rich waveform, peak-normalized to 0.95 full scale. You can supply another JSON score that you own or are licensed to use.
+The repository ships score data, not an MP3. Stages 1-2 play a bundled note score (`song-music.json`, the `music` score), and stages 3-5 play three bundled fire-truck sirens (yelp, wail, hi-lo) rendered at runtime with a harsh harmonic-rich waveform, peak-normalized to 0.95 full scale. You can supply another JSON score that you own or are licensed to use with `--score PATH`.
 
-Musical notation is still copyrighted expression, so this repository does not smuggle a copyrighted song in through the sheet-music door. The door has been checked. It is not a loophole.
+One honest note: the sirens are original CC0 scores; `song-music.json` is user-supplied and its license field says `NOASSERTION`. A converter writing "CC0 format" into a filename does not relicense the underlying melody. If you fork this repo, make sure you have the right to redistribute every score you ship — that door has been checked, and it is not a loophole.
 
 ### Development
 
@@ -123,13 +123,13 @@ Codex 已经进入那个古老、可怕、让 AI 急得团团转的状态：**�
 
 不叫"层级"了，数字不够着急。每个阶段都有名字：
 
-| 阶段 | 名称 | 会发生什么 |
-| --- | --- | --- |
-| 1 | **礼貌咳嗽** | 系统原生通知。"咳。" |
-| 2 | **拍桌子** | 通知 + 把 Codex 猛地切到前台。 |
-| 3 | **消防车出警** | 加入合成消防车 **yelp** 急促警笛。你的耳罩开始察觉异常。 |
-| 4 | **全城警报** | 加入确认弹窗 + 反复的消防车 **wail** 长鸣。你的邻居开始察觉异常。 |
-| 5 | **世界末日** | 全部一起上：弹窗、前台接管、满音量 **hi-lo** 双音警笛连播约 50 秒，加上全屏红/黑/白/黄最高 **24 Hz** 爆闪。没有第 6 级，因为没有东西了。 |
+| 阶段 | 名称 | 会发生什么 | 听起来像什么 |
+| --- | --- | --- | --- |
+| 1 | **点歌台** | 系统通知，授权声音后把内置的歌（`music`）完整放一遍 | 一首真正的歌。文明，甚至有点友好。 |
+| 2 | **单曲循环** | 通知 + Codex 跳到前台，同一首歌首尾相接循环最长 5 分钟 | 同一首歌。一遍。又一遍。再一遍。 |
+| 3 | **消防车出警** | 加入消防车 **yelp** 急促警笛 | 每秒两个来回的快速扫频（600↔1600 Hz）。催命。 |
+| 4 | **全城警报** | 加入确认弹窗 + 消防车 **wail** 长鸣 | 3 秒一个来回的低沉长鸣（500↔1700 Hz）。压迫感。 |
+| 5 | **世界末日** | 全部一起上：弹窗、前台接管、满音量 **hi-lo** 警笛约 50 秒、最高 **24 Hz** 全屏爆闪 | 两个音硬切换的欧式消防车（660/990 Hz），加上你的屏幕在红黑白黄里抽搐。没有第 6 级，因为没有东西了。 |
 
 每种通道都有独立的授权开关。只说"提醒我"，不会自动获得声音、临时改音量、切换输出设备或视觉爆闪的权限。CLI 参数仍然是 `--level 1` 到 `--level 5`——戏剧性体现在输出里。
 
@@ -179,11 +179,11 @@ ln -s "$PWD/codex-alert-user/alert-user" "${CODEX_HOME:-$HOME/.codex}/skills/ale
 
 重启 Codex 或新建一个任务，让 Codex 重新发现 skill 元数据。
 
-### 关于警笛"谱子"
+### 关于"谱子"
 
-仓库内置的是谱子数据，不是 MP3。三套消防车警笛（yelp 急促、wail 长鸣、hi-lo 双音）均为原创 CC0 谱子，运行时用谐波叠层的刺耳波形合成 WAV，并做了 0.95 满幅的峰值归一化。你也可以传入自己拥有版权或使用授权的 JSON 谱子。
+仓库内置的是谱子数据，不是 MP3。第 1-2 阶段播放内置音符谱子（`song-music.json`，名为 `music` 的歌），第 3-5 阶段播放三套消防车警笛（yelp 急促、wail 长鸣、hi-lo 双音），运行时用谐波叠层的刺耳波形合成 WAV，并做了 0.95 满幅的峰值归一化。你也可以用 `--score PATH` 传入自己拥有版权或使用授权的 JSON 谱子。
 
-完整乐谱同样属于受版权保护的音乐表达，所以本仓库不会尝试通过"只放谱子"来绕过歌曲版权。换一扇门，并不会让版权墙消失。
+一句实话：三套警笛是原创 CC0 谱子；`song-music.json` 是用户自己提供的，license 字段写的是 `NOASSERTION`。转谱工具在文件名里写"CC0 格式"，并不会改变底层旋律的版权归属。如果你要 fork 这个仓库，请确认你有权再分发你提交的每一份谱子——这扇门检查过了，不是漏洞。
 
 ### 开发与验证
 
